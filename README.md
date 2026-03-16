@@ -1,209 +1,203 @@
-# PitchSAP — MERN Stack
+# 🚀 PitchSAP – AI Startup Advisor (MERN)
 
-> SDE Assignment | React + Node + MongoDB
+PitchSAP is a **full-stack MERN web application** that helps entrepreneurs validate startup ideas, refine their pitch, and get guidance from an AI advisor.
 
-A startup action platform for Ideators to validate ideas, connect with investors, and get AI-powered guidance.
+The platform allows users to **sign up, log in, and chat with an AI startup advisor**, while securely storing user accounts and chat history in MongoDB.
 
 ---
 
-## Project Structure
+## 🌐 Live Demo
 
-```
-pitchsap/
-├── package.json          ← root scripts (runs both servers)
-├── .gitignore
+Frontend (Vercel)
+https://pitchsap-landing-redesign.vercel.app
+
+Backend API (Render)
+https://pitchsap-landing-redesign.onrender.com
+
+Health Check
+https://pitchsap-landing-redesign.onrender.com/api/health
+
+---
+
+## 🧠 Features
+
+* 🔐 User Authentication (JWT based login & signup)
+* 💬 AI Startup Advisor Chat
+* 📜 Chat History stored in MongoDB
+* ⚡ Typing animation for AI responses
+* 🧩 REST API architecture
+* 🌍 Deployed full-stack MERN architecture
+* 📱 Fully responsive UI
+
+---
+
+## 🏗️ Tech Stack
+
+Frontend
+
+* React.js
+* Vite
+* Axios
+* CSS / Modern UI
+
+Backend
+
+* Node.js
+* Express.js
+* MongoDB (Atlas)
+* JWT Authentication
+* CORS middleware
+
+Deployment
+
+* Vercel → Frontend
+* Render → Backend API
+* MongoDB Atlas → Database
+
+---
+
+## 📁 Project Structure
+
+pitchsap
 │
-├── server/               ← Node.js + Express backend
-│   ├── server.js         ← entry point
-│   ├── .env.example      ← copy to .env and fill values
-│   ├── routes/
-│   │   ├── auth.js       ← POST /api/auth/signup, /login, GET /me
-│   │   └── chat.js       ← POST /api/chat, GET /api/chat/history
+├── client/                # React frontend
+│   ├── src/
+│   ├── components/
+│   ├── context/
+│   └── api.js
+│
+├── server/                # Node.js backend
 │   ├── models/
-│   │   ├── User.js       ← name, email, password (bcrypt hashed)
-│   │   └── Message.js    ← userId, message, reply, timestamp
-│   └── middleware/
-│       └── auth.js       ← JWT protect middleware
+│   ├── routes/
+│   ├── middleware/
+│   └── server.js
 │
-└── client/               ← React + Vite frontend
-    ├── vite.config.js    ← proxies /api → localhost:5000
-    ├── index.html
-    └── src/
-        ├── main.jsx
-        ├── App.jsx
-        ├── api.js        ← axios instance with JWT interceptor
-        ├── index.css
-        ├── context/
-        │   └── AuthContext.jsx   ← global user state
-        ├── components/
-        │   ├── Navbar.jsx
-        │   ├── LoginModal.jsx
-        │   ├── SignupModal.jsx
-        │   └── Chat.jsx
-        └── pages/
-            └── Home.jsx
-```
+├── package.json
+└── README.md
 
 ---
 
-## API Endpoints
+## ⚙️ Environment Variables
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/api/auth/signup` | No | Register new user |
-| POST | `/api/auth/login` | No | Login, returns JWT |
-| GET | `/api/auth/me` | Yes | Get current user |
-| POST | `/api/chat` | Yes | Send message, save to DB, get AI reply |
-| GET | `/api/chat/history` | Yes | Get logged-in user's chat history |
-| GET | `/api/health` | No | Server health check |
+### Backend (.env)
+
+PORT=5001
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+CLIENT_URL=https://pitchsap-landing-redesign.vercel.app
 
 ---
 
-## Quick Start
+### Frontend (Vercel Environment Variable)
 
-### Prerequisites
-- Node.js 18+
-- MongoDB running locally (`mongod`) **or** a free [MongoDB Atlas](https://cloud.mongodb.com) cluster
+VITE_API_URL=https://pitchsap-landing-redesign.onrender.com/api
 
-### 1 — Clone & install
+---
 
-```bash
-git clone https://github.com/YOUR_USERNAME/pitchsap.git
-cd pitchsap
-npm run install:all
-```
+## 🚀 Local Development Setup
 
-### 2 — Configure environment
+### 1️⃣ Clone Repository
 
-```bash
-cd server
-cp .env.example .env
-```
+git clone https://github.com/Vaibhavats/pitchsap-landing-redesign.git
+cd pitchsap-landing-redesign
 
-Edit `server/.env`:
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/pitchsap
-JWT_SECRET=change_this_to_a_long_random_string
-CLIENT_URL=http://localhost:5173
-```
+---
 
-For MongoDB Atlas replace `MONGO_URI` with your connection string:
-```env
-MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/pitchsap
-```
+### 2️⃣ Install Dependencies
 
-### 3 — Run (both servers)
+Install root dependencies
 
-```bash
-# From root
+npm install
+
+Install frontend dependencies
+
+cd client
+npm install
+
+Install backend dependencies
+
+cd ../server
+npm install
+
+---
+
+### 3️⃣ Run Development Servers
+
+From project root:
+
 npm run dev
-```
 
-This starts:
-- Backend → http://localhost:5001
-- Frontend → http://localhost:5173
+This will start:
 
-Or run separately:
-```bash
-npm run server   # backend only
-npm run client   # frontend only
-```
+Frontend
+http://localhost:5173
+
+Backend
+http://localhost:5001
 
 ---
 
-## How It Works
+## 📡 API Endpoints
 
-### Auth Flow
-```
-User fills signup form
-  → POST /api/auth/signup
-  → Password hashed with bcrypt (10 rounds)
-  → User saved to MongoDB
-  → JWT returned (7 day expiry)
-  → Stored in localStorage
-  → Axios interceptor attaches to all requests
-```
+Auth Routes
 
-### Chat Flow
-```
-User types message (must be logged in)
-  → POST /api/chat  { message: "..." }
-  → JWT verified by protect middleware
-  → Mock AI generates context-aware reply
-  → Message + reply saved to MongoDB (Message model)
-  → Response returned to React
-  → Displayed in chat UI
-  → On next login, GET /api/chat/history restores full conversation
-```
+POST /api/auth/signup
+POST /api/auth/login
 
-### Password Security
-- Passwords are **never stored in plain text**
-- bcrypt with 10 salt rounds on every signup
-- `matchPassword()` method on User model for comparison
-- `toJSON()` override ensures password never appears in API responses
+Chat Routes
+
+POST /api/chat
+GET /api/chat/history
+
+Health Check
+
+GET /api/health
 
 ---
 
-## Database Schema
+## 🔐 Authentication
 
-**Users collection**
-```js
-{
-  _id: ObjectId,
-  name: String,        // required, min 2 chars
-  email: String,       // required, unique, lowercase
-  password: String,    // bcrypt hash
-  createdAt: Date,
-  updatedAt: Date
-}
-```
+JWT tokens are used for authentication.
 
-**Messages collection**
-```js
-{
-  _id: ObjectId,
-  userId: ObjectId,    // ref: User
-  message: String,     // user's message
-  reply: String,       // AI response
-  timestamp: Date,
-  createdAt: Date,
-  updatedAt: Date
-}
-```
+Token is stored in browser localStorage and attached to every request through Axios interceptors.
 
 ---
 
-## Deploy
+## 📊 Deployment Architecture
 
-### Backend (Railway / Render)
-1. Push to GitHub
-2. Connect repo on Railway or Render
-3. Set root directory to `server/`
-4. Add environment variables
-5. Deploy
+Frontend
+Vercel (React + Vite)
 
-### Frontend (Vercel)
-1. Connect repo on Vercel
-2. Set root directory to `client/`
-3. Add env: `VITE_API_URL=https://your-backend.railway.app`
-4. Update `vite.config.js` proxy OR use `VITE_API_URL` in `api.js`
+↓ API Calls
 
----
+Backend
+Render (Node.js + Express)
 
-## Tech Stack
+↓ Database
 
-| Layer | Tech |
-|-------|------|
-| Frontend | React 18, Vite, React Router |
-| Styling | Pure CSS with CSS variables |
-| HTTP client | Axios with JWT interceptor |
-| Backend | Node.js, Express |
-| Auth | JWT (jsonwebtoken) + bcrypt |
-| Database | MongoDB + Mongoose |
-| Dev tooling | Nodemon, Concurrently |
-| Fonts | Syne + DM Sans (Google Fonts) |
+MongoDB Atlas
 
 ---
 
-*Built for PitchSAP SDE Assignment*
+## 📸 Screenshots
+
+Landing Page
+AI Chat Interface
+Authentication Flow
+
+(Add screenshots here)
+
+---
+
+## 👨‍💻 Author
+
+Vaibhav Kumar
+
+GitHub
+https://github.com/Vaibhavats
+
+---
+
+## 📄 License
+
+This project is for educational and demonstration purposes.
