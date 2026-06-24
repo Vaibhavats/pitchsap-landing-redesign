@@ -179,13 +179,6 @@ MongoDB Atlas
 
 ---
 
-## 📸 Screenshots
-
-Landing Page
-AI Chat Interface
-Authentication Flow
-
-(Add screenshots here)
 
 ---
 
